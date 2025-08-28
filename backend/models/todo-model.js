@@ -1,14 +1,16 @@
 const mongoose = require('mongoose')
 
 const todoSchema = mongoose.Schema({
-    name: String,
+    title: String,
     content: String,
-    isCompleted: Boolean,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
-    createdAt: String,
+    createdAt: {
+        type:String,
+        default:Date.now()
+    },
     duedate: String,
     status:{
         type: String,

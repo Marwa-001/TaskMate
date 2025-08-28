@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const userModel = require('./models/user-model')
 const userRouter = require('./routes/userRouter')
+const todosRouter = require('./routes/index')
 const db = require('./config/mongoose-collection')
 const cookieParser = require('cookie-parser')
 
@@ -17,5 +18,6 @@ app.get('/', async (req, res) => {
 })
 
 app.use('/user', userRouter)
+app.use('/todos', todosRouter)
 
 app.listen(3000)

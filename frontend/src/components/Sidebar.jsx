@@ -1,79 +1,30 @@
+import SidebarItem from "./SidebarItem";
+
 const Sidebar = () => {
-    return (
-        <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style={{ width: '280px', height: '88.7vh' }}>
-            <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <svg className="bi pe-none me-2" width="40" height="32" aria-hidden="true">
-                    <use xlinkHref="#bootstrap"></use>
-                </svg>
-                <span className="fs-4">Sidebar</span>
-            </a>
-            <hr />
-            <ul className="nav nav-pills flex-column mb-auto">
-                <li className="nav-item">
-                    <a href="#" className="nav-link active" aria-current="page">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#home"></use>
-                        </svg>
-                        Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link text-white">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#speedometer2"></use>
-                        </svg>
-                        My Task
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link text-white">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#table"></use>
-                        </svg>
-                        Vital Task
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link text-white">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#grid"></use>
-                        </svg>
-                        Task Categories
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link text-white">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#people-circle"></use>
-                        </svg>
-                        Settings
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link text-white">
-                        <svg className="bi pe-none me-2" width="16" height="16" aria-hidden="true">
-                            <use xlinkHref="#people-circle"></use>
-                        </svg>
-                        Help
-                    </a>
-                </li>
-            </ul>
-            <hr />
-            <div className="dropdown">
-                <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2" />
-                    <strong>mdo</strong>
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a className="dropdown-item" href="#">New project...</a></li>
-                    <li><a className="dropdown-item" href="#">Settings</a></li>
-                    <li><a className="dropdown-item" href="#">Profile</a></li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#">Sign out</a></li>
-                </ul>
-            </div>
+  return (
+    <div className="w-80 bg-white rounded-r-[32px] shadow-xl p-8 flex flex-col justify-between">
+      <div className="flex flex-col items-center">
+        <div className="flex items-center space-x-4 mb-8">
+          <img className="w-16 h-16 rounded-full" src="https://placehold.co/64x64/E0E0E0/white?text=SG" alt="Profile" />
+          <div className="flex flex-col">
+            <h4 className="text-sm font-semibold text-gray-800">Sundar Gurung</h4>
+            <p className="text-[10px] text-gray-500">sundargurung999@gmail.com</p>
+          </div>
         </div>
-    );
-}
+        <nav className="w-full">
+          <SidebarItem icon="🏠" text="Dashboard" active />
+          <SidebarItem icon="❗" text="Vital Task" />
+          <SidebarItem icon="✅" text="My Task" />
+          <SidebarItem icon="🏷️" text="Task Categories" />
+          <SidebarItem icon="⚙️" text="Settings" />
+          <SidebarItem icon="❓" text="Help" />
+        </nav>
+      </div>
+      <button className="bg-red-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-red-600 transition-colors">
+        Logout
+      </button>
+    </div>
+  );
+};
 
 export default Sidebar;

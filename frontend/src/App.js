@@ -1,15 +1,18 @@
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/Navbar';
+import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
 
-function App() {
+const App = () => {
   return (
-    <>
-    <Navbar />
-    <Sidebar />
-    </>
+    <div className="flex bg-[#F5F8FF] min-h-screen font-inter">
+      <Sidebar />
+      <div className="flex-1 flex flex-col p-8">
+        <Header />
+        <MainContent />
+      </div>
+    </div>
   );
-}
+};
 
 export default App;

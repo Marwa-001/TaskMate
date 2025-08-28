@@ -2,9 +2,9 @@ import SidebarItem from "./SidebarItem";
 
 const Sidebar = () => {
   return (
-    <div className="w-80 bg-white rounded-r-[32px] shadow-xl p-8 flex flex-col justify-between">
+    <div className="w-75 h-[83vh] bg-white rounded-r-[32px] shadow-xl p-8 flex flex-col justify-between">
       <div className="flex flex-col items-center">
-        <div className="flex items-center space-x-4 mb-8">
+        <div className="flex items-center space-x-4 mb-5">
           <img className="w-16 h-16 rounded-full" src="https://placehold.co/64x64/E0E0E0/white?text=SG" alt="Profile" />
           <div className="flex flex-col">
             <h4 className="text-sm font-semibold text-gray-800">Sundar Gurung</h4>
@@ -20,7 +20,7 @@ const Sidebar = () => {
           <SidebarItem icon="❓" text="Help" />
         </nav>
       </div>
-      <button className="bg-red-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-red-600 transition-colors">
+      <button className="bg-red-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-red-600 transition-colors mt-2">
         Logout
       </button>
     </div>

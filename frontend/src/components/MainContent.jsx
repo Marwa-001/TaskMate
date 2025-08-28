@@ -7,8 +7,8 @@ const MainContent = () => {
   return (
     <div className="flex-1 flex flex-col space-y-8">
       <WelcomeSection />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-8">
           <TasksList title="To-Do" />
         </div>
         <div className="space-y-8">
@@ -19,5 +19,6 @@ const MainContent = () => {
     </div>
   );
 };
+
 
 export default MainContent;

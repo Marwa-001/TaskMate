@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "title": "Attend Nischal's Birthday Party",
+    "description": "Buy gifts on the way and pick up cake from the bakery.",
+    "priority": "Ultimate",
+    "status": "In Progress",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-10-27",
+    "assignedTo": {
+      "name": "Sundar Gurung",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=SG"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Landing Page Design",
+    "description": "Get the work done by EOD and discuss with client before leaving.",
+    "priority": "High",
+    "status": "In Progress",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-11-05",
+    "assignedTo": {
+      "name": "Jane Doe",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=JD"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Presentation on Final Product",
+    "description": "Make sure everything is functioning and all the necessary files are properly met.",
+    "priority": "Medium",
+    "status": "In Progress",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-11-15",
+    "assignedTo": {
+      "name": "Mike Smith",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=MS"
+    }
+  },
+  {
+    "id": 4,
+    "title": "Walk the dog",
+    "description": "Take the dog to the park and bring treats as well.",
+    "priority": "Low",
+    "status": "Completed",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": true,
+    "dueDate": "2023-10-20",
+    "assignedTo": {
+      "name": "John Doe",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=JD"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Conduct meeting",
+    "description": "Meet with the client and finalize requirements.",
+    "priority": "High",
+    "status": "Completed",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": true,
+    "dueDate": "2023-10-25",
+    "assignedTo": {
+      "name": "Mike Smith",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=MS"
+    }
+  }
+]

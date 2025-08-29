@@ -1,8 +1,16 @@
 import { useState } from 'react';
 
-const Header = () => {
+const Header = ({ onSearchChange }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearchChange(query);
+  };
+
   return (
-    <header className="flex items-center justify-between ">
+    <header className="flex items-center justify-between">
       <div className="flex items-center space-x-4">
         <h1 className="text-3xl font-bold text-gray-800">TaskMate</h1>
         <div className="relative">
@@ -10,10 +18,16 @@ const Header = () => {
             type="text"
             placeholder="Search your task here..."
             className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchQuery}
+            onChange={handleSearch}
           />
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            🔍
+          </span>
         </div>
-        <button className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">🔔</button>
+        <button className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
+          🔔
+        </button>
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">

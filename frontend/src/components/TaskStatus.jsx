@@ -1,14 +1,35 @@
-import ProgressCircle from "./ProgressCircle";
-import StatusLegend from "./StatusLegend";
+import ProgressCircle from './ProgressCircle';
+import StatusLegend from './StatusLegend';
 
-const TaskStatus = () => {
+const TaskStatus = ({ tasks }) => {
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((task) => task.status === 'Completed').length;
+  const inProgressTasks = tasks.filter((task) => task.status === 'In Progress').length;
+  const notStartedTasks = totalTasks - completedTasks - inProgressTasks;
+
+  const completedPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const inProgressPercentage = totalTasks > 0 ? Math.round((inProgressTasks / totalTasks) * 100) : 0;
+  const notStartedPercentage = totalTasks > 0 ? Math.round((notStartedTasks / totalTasks) * 100) : 0;
+
   return (
     <div className="bg-white rounded-3xl shadow-lg p-6">
       <h3 className="text-xl font-semibold text-gray-800 mb-4">Task Status</h3>
       <div className="flex justify-around items-center">
-        <ProgressCircle percentage={84} label="Completed" color="green" />
-        <ProgressCircle percentage={46} label="In Progress" color="blue" />
-        <ProgressCircle percentage={13} label="Not Started" color="red" />
+        <ProgressCircle
+          percentage={completedPercentage}
+          label="Completed"
+          color="green"
+        />
+        <ProgressCircle
+          percentage={inProgressPercentage}
+          label="In Progress"
+          color="blue"
+        />
+        <ProgressCircle
+          percentage={notStartedPercentage}
+          label="Not Started"
+          color="red"
+        />
       </div>
       <div className="flex flex-col space-y-2 mt-4">
         <StatusLegend color="green" label="Completed" />

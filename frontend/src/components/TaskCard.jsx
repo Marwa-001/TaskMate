@@ -1,7 +1,7 @@
 import { priorityColors } from '../utils/priorityColors';
 import { Link, useLocation } from 'react-router-dom';
 
-const TaskCard = ({ task, onToggleCompletion }) => {
+const TaskCard = ({ task, onStartTask, onCompleteTask }) => {
   const { id, title, description, priority, status, image, isCompleted } = task;
   const location = useLocation();
   const colors = priorityColors[priority] || { bg: 'bg-gray-100', text: 'text-gray-800' };
@@ -11,15 +11,37 @@ const TaskCard = ({ task, onToggleCompletion }) => {
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
           <h4 className={`font-semibold ${colors.text}`}>{title}</h4>
-          <input
-            type="checkbox"
-            checked={isCompleted}
-            onChange={(e) => {
-              e.stopPropagation();
-              onToggleCompletion(id);
-            }}
-            className="form-checkbox h-4 w-4 text-blue-600 rounded cursor-pointer"
-          />
+          {/* Conditional rendering based on task status */}
+          {status === 'Not Started' && onStartTask && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStartTask(id);
+              }}
+              className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full hover:bg-blue-600 transition-colors"
+            >
+              Start Task
+            </button>
+          )}
+          {status === 'In Progress' && onCompleteTask && (
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={(e) => {
+                e.stopPropagation();
+                onCompleteTask(id);
+              }}
+              className="form-checkbox h-4 w-4 text-blue-600 rounded"
+            />
+          )}
+          {status === 'Completed' && (
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              disabled
+              className="form-checkbox h-4 w-4 text-gray-400 rounded"
+            />
+          )}
         </div>
         <p className="text-xs text-gray-600 mb-2">{description}</p>
         <div className="flex space-x-2 items-center text-[10px] text-gray-500">
@@ -42,11 +64,13 @@ const TaskCard = ({ task, onToggleCompletion }) => {
   const isLink = location.pathname.includes('vital-tasks') || location.pathname.includes('my-tasks');
   const pathPrefix = location.pathname.startsWith('/vital') ? 'vital-tasks' : 'my-tasks';
   
-  if (isLink) {
-    return <Link to={`/${pathPrefix}/${id}`}>{content}</Link>;
-  }
-
-  return content;
+  return isLink ? (
+    <Link to={`/${pathPrefix}/${id}`} className="block">
+      {content}
+    </Link>
+  ) : (
+    content
+  );
 };
 
 export default TaskCard;

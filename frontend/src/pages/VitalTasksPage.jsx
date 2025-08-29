@@ -2,7 +2,7 @@ import React from 'react';
 import TaskList from '../components/TaskList';
 import { useParams } from 'react-router-dom';
 
-const VitalTasksPage = ({ tasks, onToggleTaskCompletion }) => {
+const VitalTasksPage = ({ tasks, onStartTask, onCompleteTask }) => {
   const vitalTasks = tasks.filter(task => task.priority === 'Ultimate');
 
   return (
@@ -11,7 +11,8 @@ const VitalTasksPage = ({ tasks, onToggleTaskCompletion }) => {
       <TaskList
         title="Urgent & Important"
         tasks={vitalTasks}
-        onToggleTaskCompletion={onToggleTaskCompletion}
+        onStartTask={onStartTask}
+        onCompleteTask={onCompleteTask}
         allowNavigation={true}
       />
     </div>

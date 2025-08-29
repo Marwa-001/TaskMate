@@ -2,7 +2,7 @@ import { useState } from 'react';
 import TaskCard from './TaskCard';
 import AddTaskForm from './AddTaskForm';
 
-const TasksList = ({ title, tasks, onToggleTaskCompletion, onAddTask }) => {
+const TasksList = ({ title, tasks, onStartTask, onCompleteTask, onAddTask }) => {
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddButtonClick = () => {
@@ -44,7 +44,8 @@ const TasksList = ({ title, tasks, onToggleTaskCompletion, onAddTask }) => {
             <TaskCard
               key={task.id}
               task={task}
-              onToggleCompletion={onToggleTaskCompletion}
+              onStartTask={onStartTask}
+              onCompleteTask={onCompleteTask}
             />
           ))
         ) : (

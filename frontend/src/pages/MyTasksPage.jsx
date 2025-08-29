@@ -2,7 +2,7 @@ import React from 'react';
 import TaskList from '../components/TaskList';
 import TaskCard from '../components/TaskCard';
 
-const MyTasksPage = ({ tasks, onToggleTaskCompletion }) => {
+const MyTasksPage = ({ tasks, onStartTask, onCompleteTask }) => {
   // Filter for tasks that are not yet completed
   const myTasks = tasks.filter(task => !task.isCompleted);
 
@@ -12,7 +12,8 @@ const MyTasksPage = ({ tasks, onToggleTaskCompletion }) => {
       <TaskList
         title="All My Tasks"
         tasks={myTasks}
-        onToggleTaskCompletion={onToggleTaskCompletion}
+        onStartTask={onStartTask}
+        onCompleteTask={onCompleteTask}
         allowNavigation={true}
       />
     </div>

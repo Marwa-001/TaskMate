@@ -13,24 +13,38 @@ import initialTasks from './data/tasks.json';
 
 const App = () => {
   const [tasks, setTasks] = useState(initialTasks);
+  const [activeTab, setActiveTab] = useState('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Function to toggle task completion status
-  const toggleTaskCompletion = (id) => {
+  // Function to change a task from 'Not Started' to 'In Progress'
+  const startTask = (id) => {
     setTasks(
       tasks.map((task) =>
         task.id === id
           ? {
               ...task,
-              isCompleted: !task.isCompleted,
-              status: task.isCompleted ? 'In Progress' : 'Completed',
+              status: 'In Progress',
             }
           : task
       )
     );
   };
 
-  // Function to add a new task
+  // Function to change a task from 'In Progress' to 'Completed'
+  const completeTask = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              isCompleted: true,
+              status: 'Completed',
+            }
+          : task
+      )
+    );
+  };
+
   const addTask = (newTask) => {
     setTasks([
       ...tasks,
@@ -50,7 +64,7 @@ const App = () => {
       <div className="flex flex-col h-screen bg-[#F5F8FF] p-8 font-inter">
         <Header onSearchChange={setSearchQuery} />
         <div className="flex flex-1 mt-8">
-          <Sidebar />
+          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
           <div className="flex-1 flex flex-col pl-8 overflow-y-auto">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -59,7 +73,8 @@ const App = () => {
                 element={
                   <MainContent
                     tasks={filteredTasks}
-                    onToggleTaskCompletion={toggleTaskCompletion}
+                    onStartTask={startTask}
+                    onCompleteTask={completeTask}
                     onAddTask={addTask}
                   />
                 }
@@ -69,7 +84,8 @@ const App = () => {
                 element={
                   <VitalTasksPage
                     tasks={tasks}
-                    onToggleTaskCompletion={toggleTaskCompletion}
+                    onStartTask={startTask}
+                    onCompleteTask={completeTask}
                   />
                 }
               />
@@ -78,7 +94,8 @@ const App = () => {
                 element={
                   <MyTasksPage
                     tasks={tasks}
-                    onToggleTaskCompletion={toggleTaskCompletion}
+                    onStartTask={startTask}
+                    onCompleteTask={completeTask}
                   />
                 }
               />
@@ -88,11 +105,11 @@ const App = () => {
               />
               <Route
                 path="/:taskType/:taskId"
-                element={<TaskDetailPage tasks={tasks} onToggleTaskCompletion={toggleTaskCompletion} />}
+                element={<TaskDetailPage tasks={tasks} onCompleteTask={completeTask} />}
               />
               <Route
                 path="/categories/:categoryName"
-                element={<CategoryTasksPage tasks={tasks} onToggleTaskCompletion={toggleTaskCompletion} />}
+                element={<CategoryTasksPage tasks={tasks} onCompleteTask={completeTask} />}
               />
             </Routes>
           </div>

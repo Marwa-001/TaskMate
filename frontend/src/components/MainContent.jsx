@@ -3,7 +3,7 @@ import TasksList from './TaskList';
 import TaskStatus from './TaskStatus';
 import CompletedTasks from './CompletedTasks';
 
-const MainContent = ({ tasks, onToggleTaskCompletion, onAddTask }) => {
+const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask }) => {
   // Separate tasks into To-Do and Completed
   const toDoTasks = tasks.filter((task) => !task.isCompleted);
   const completedTasks = tasks.filter((task) => task.isCompleted);
@@ -16,15 +16,17 @@ const MainContent = ({ tasks, onToggleTaskCompletion, onAddTask }) => {
           <TasksList
             title="To-Do"
             tasks={toDoTasks}
-            onToggleTaskCompletion={onToggleTaskCompletion}
-            onAddTask={onAddTask} // Ensure onAddTask is passed here
+            onStartTask={onStartTask}
+            onCompleteTask={onCompleteTask}
+            onAddTask={onAddTask}
           />
         </div>
         <div className="space-y-8">
           <TaskStatus tasks={tasks} />
           <CompletedTasks
             tasks={completedTasks}
-            onToggleTaskCompletion={onToggleTaskCompletion}
+            onStartTask={onStartTask}
+            onCompleteTask={onCompleteTask}
           />
         </div>
       </div>

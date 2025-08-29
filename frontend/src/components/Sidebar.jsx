@@ -1,7 +1,9 @@
 import SidebarItem from './SidebarItem';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar = ({ activeTab, onTabChange }) => {
+const Sidebar = () => {
+  const location = useLocation();
+
   return (
     <div className="w-75 h-[83vh] bg-white rounded-r-[32px] shadow-xl p-8 flex flex-col justify-between">
       <div className="flex flex-col items-center">
@@ -21,47 +23,43 @@ const Sidebar = ({ activeTab, onTabChange }) => {
           </div>
         </div>
         <nav className="w-full">
-          <Link to="/">
+          <Link to="/dashboard">
             <SidebarItem
               icon="🏠"
               text="Dashboard"
-              onClick={() => onTabChange('Dashboard')}
-              active={activeTab === 'Dashboard'}
+              active={location.pathname === '/dashboard'}
             />
           </Link>
           <Link to="/vital-tasks">
             <SidebarItem
               icon="❗"
               text="Vital Task"
-              onClick={() => onTabChange('Vital Task')}
-              active={activeTab === 'Vital Task'}
+              active={location.pathname.startsWith('/vital')}
             />
           </Link>
           <Link to="/my-tasks">
             <SidebarItem
               icon="✅"
               text="My Task"
-              onClick={() => onTabChange('My Task')}
-              active={activeTab === 'My Task'}
+              active={location.pathname.startsWith('/my')}
+            />
+          </Link>
+          <Link to="/task-categories">
+            <SidebarItem
+              icon="🏷️"
+              text="Task Categories"
+              active={location.pathname === '/task-categories'}
             />
           </Link>
           <SidebarItem
-            icon="🏷️"
-            text="Task Categories"
-            onClick={() => onTabChange('Task Categories')}
-            active={activeTab === 'Task Categories'}
-          />
-          <SidebarItem
             icon="⚙️"
             text="Settings"
-            onClick={() => onTabChange('Settings')}
-            active={activeTab === 'Settings'}
+            active={false}
           />
           <SidebarItem
             icon="❓"
             text="Help"
-            onClick={() => onTabChange('Help')}
-            active={activeTab === 'Help'}
+            active={false}
           />
         </nav>
       </div>

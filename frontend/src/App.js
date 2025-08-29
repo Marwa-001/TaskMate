@@ -7,11 +7,12 @@ import MainContent from './components/MainContent';
 import VitalTasksPage from './pages/VitalTasksPage';
 import MyTasksPage from './pages/MyTasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
+import TaskCategoriesPage from './pages/TaskCategoriesPage';
+import CategoryTasksPage from './pages/CategoryTasksPage';
 import initialTasks from './data/tasks.json';
 
 const App = () => {
   const [tasks, setTasks] = useState(initialTasks);
-  const [activeTab, setActiveTab] = useState('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Function to toggle task completion status
@@ -49,7 +50,7 @@ const App = () => {
       <div className="flex flex-col h-screen bg-[#F5F8FF] p-8 font-inter">
         <Header onSearchChange={setSearchQuery} />
         <div className="flex flex-1 mt-8">
-          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+          <Sidebar />
           <div className="flex-1 flex flex-col pl-8 overflow-y-auto">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -82,8 +83,16 @@ const App = () => {
                 }
               />
               <Route
+                path="/task-categories"
+                element={<TaskCategoriesPage tasks={tasks} />}
+              />
+              <Route
                 path="/:taskType/:taskId"
                 element={<TaskDetailPage tasks={tasks} onToggleTaskCompletion={toggleTaskCompletion} />}
+              />
+              <Route
+                path="/categories/:categoryName"
+                element={<CategoryTasksPage tasks={tasks} onToggleTaskCompletion={toggleTaskCompletion} />}
               />
             </Routes>
           </div>

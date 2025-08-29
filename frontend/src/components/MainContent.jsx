@@ -17,7 +17,7 @@ const MainContent = ({ tasks, onToggleTaskCompletion, onAddTask }) => {
             title="To-Do"
             tasks={toDoTasks}
             onToggleTaskCompletion={onToggleTaskCompletion}
-            onAddTask={onAddTask}
+            onAddTask={onAddTask} // Ensure onAddTask is passed here
           />
         </div>
         <div className="space-y-8">

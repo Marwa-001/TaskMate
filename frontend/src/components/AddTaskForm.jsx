@@ -4,11 +4,12 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Low');
+  const [category, setCategory] = useState('Work'); // New state for category
   const [dueDate, setDueDate] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !description || !dueDate) {
+    if (!title || !description || !dueDate || !category) {
       alert('Please fill out all fields.');
       return;
     }
@@ -17,14 +18,15 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
       title,
       description,
       priority,
+      category, // Include category in the new task object
       dueDate,
       status: 'Not Started',
       image: 'https://placehold.co/120x80',
       isCompleted: false,
       assignedTo: {
         name: 'Sundar Gurung',
-        avatar: 'https://placehold.co/32x32/E0E0E0/white?text=SG'
-      }
+        avatar: 'https://placehold.co/32x32/E0E0E0/white?text=SG',
+      },
     };
     onSubmit(newTask);
   };
@@ -53,7 +55,7 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
             required
           ></textarea>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
             <select
@@ -68,15 +70,32 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            >
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Health & Fitness">Health & Fitness</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Finance">Finance</option>
+              <option value="Learning">Learning</option>
+              <option value="Social">Social</option>
+              <option value="Creative">Creative</option>
+            </select>
           </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
         </div>
         <div className="flex justify-end space-x-2">
           <button

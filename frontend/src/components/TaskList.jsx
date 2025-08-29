@@ -48,7 +48,7 @@ const TasksList = ({ title, tasks, onToggleTaskCompletion, onAddTask }) => {
             />
           ))
         ) : (
-          <p className="text-center text-gray-500">No tasks to show.</p>
+          <p className="text-center text-gray-500">No tasks to display.</p>
         )}
       </div>
     </div>

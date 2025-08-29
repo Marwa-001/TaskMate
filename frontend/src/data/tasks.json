@@ -8,6 +8,7 @@
     "image": "https://placehold.co/120x80",
     "isCompleted": false,
     "dueDate": "2023-10-27",
+    "category": "Social",
     "assignedTo": {
       "name": "Sundar Gurung",
       "avatar": "https://placehold.co/32x32/E0E0E0/white?text=SG"
@@ -22,6 +23,7 @@
     "image": "https://placehold.co/120x80",
     "isCompleted": false,
     "dueDate": "2023-11-05",
+    "category": "Work",
     "assignedTo": {
       "name": "Jane Doe",
       "avatar": "https://placehold.co/32x32/E0E0E0/white?text=JD"
@@ -36,6 +38,7 @@
     "image": "https://placehold.co/120x80",
     "isCompleted": false,
     "dueDate": "2023-11-15",
+    "category": "Work",
     "assignedTo": {
       "name": "Mike Smith",
       "avatar": "https://placehold.co/32x32/E0E0E0/white?text=MS"
@@ -49,24 +52,71 @@
     "status": "Completed",
     "image": "https://placehold.co/120x80",
     "isCompleted": true,
-    "dueDate": "2023-10-20",
+    "dueDate": "2023-11-01",
+    "category": "Personal",
     "assignedTo": {
-      "name": "John Doe",
-      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=JD"
+      "name": "Sundar Gurung",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=SG"
     }
   },
   {
     "id": 5,
-    "title": "Conduct meeting",
-    "description": "Meet with the client and finalize requirements.",
+    "title": "Grocery Shopping",
+    "description": "Buy milk, eggs, bread, and vegetables from the store.",
+    "priority": "Medium",
+    "status": "Not Started",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-11-03",
+    "category": "Shopping",
+    "assignedTo": {
+      "name": "Lisa K",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=LK"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Read 'The Alchemist'",
+    "description": "Finish the book by the end of the month.",
+    "priority": "Low",
+    "status": "In Progress",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-11-30",
+    "category": "Learning",
+    "assignedTo": {
+      "name": "Sundar Gurung",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=SG"
+    }
+  },
+  {
+    "id": 7,
+    "title": "Review Q3 Budget",
+    "description": "Analyze spending and allocate funds for Q4.",
     "priority": "High",
+    "status": "Not Started",
+    "image": "https://placehold.co/120x80",
+    "isCompleted": false,
+    "dueDate": "2023-11-10",
+    "category": "Finance",
+    "assignedTo": {
+      "name": "Jane Doe",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=JD"
+    }
+  },
+  {
+    "id": 8,
+    "title": "Gym Workout",
+    "description": "Complete leg day and 30 minutes of cardio.",
+    "priority": "Ultimate",
     "status": "Completed",
     "image": "https://placehold.co/120x80",
     "isCompleted": true,
-    "dueDate": "2023-10-25",
+    "dueDate": "2023-11-02",
+    "category": "Health & Fitness",
     "assignedTo": {
-      "name": "Mike Smith",
-      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=MS"
+      "name": "Sundar Gurung",
+      "avatar": "https://placehold.co/32x32/E0E0E0/white?text=SG"
     }
   }
 ]

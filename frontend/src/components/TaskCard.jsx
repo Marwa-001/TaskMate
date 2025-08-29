@@ -18,7 +18,7 @@ const TaskCard = ({ task, onToggleCompletion }) => {
               e.stopPropagation();
               onToggleCompletion(id);
             }}
-            className="form-checkbox h-4 w-4 text-blue-600 rounded"
+            className="form-checkbox h-4 w-4 text-blue-600 rounded cursor-pointer"
           />
         </div>
         <p className="text-xs text-gray-600 mb-2">{description}</p>
@@ -41,14 +41,12 @@ const TaskCard = ({ task, onToggleCompletion }) => {
 
   const isLink = location.pathname.includes('vital-tasks') || location.pathname.includes('my-tasks');
   const pathPrefix = location.pathname.startsWith('/vital') ? 'vital-tasks' : 'my-tasks';
+  
+  if (isLink) {
+    return <Link to={`/${pathPrefix}/${id}`}>{content}</Link>;
+  }
 
-  return isLink ? (
-    <Link to={`/${pathPrefix}/${id}`} className="block">
-      {content}
-    </Link>
-  ) : (
-    content
-  );
+  return content;
 };
 
 export default TaskCard;

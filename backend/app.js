@@ -6,6 +6,8 @@ const userRouter = require('./routes/userRouter')
 const todosRouter = require('./routes/index')
 const db = require('./config/mongoose-collection')
 const cookieParser = require('cookie-parser')
+const cors = require("cors");
+app.use(cors());
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -18,6 +20,6 @@ app.get('/', async (req, res) => {
 })
 
 app.use('/user', userRouter)
-app.use('/todos', todosRouter)
+app.use("/api/todos", todosRouter);
 
 app.listen(3000)

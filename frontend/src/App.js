@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios'; 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 import './App.css';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -9,55 +11,95 @@ import MyTasksPage from './pages/MyTasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import TaskCategoriesPage from './pages/TaskCategoriesPage';
 import CategoryTasksPage from './pages/CategoryTasksPage';
-import initialTasks from './data/tasks.json';
 
 const App = () => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Function to change a task from 'Not Started' to 'In Progress'
-  const startTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              status: 'In Progress',
-            }
-          : task
-      )
-    );
+  // Example: if you’re storing JWT in localStorage
+  const token = localStorage.getItem("token");
+
+  // Fetch tasks from backend
+useEffect(() => {
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/todos");
+      const data = await res.json();
+      console.log("Fetched tasks:", data);
+      setTasks(data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    } finally {
+      setLoading(false); // ✅ important
+    }
   };
 
-  // Function to change a task from 'In Progress' to 'Completed'
-  const completeTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              isCompleted: true,
-              status: 'Completed',
-            }
-          : task
-      )
-    );
+  fetchTasks();
+}, []);
+
+
+
+  // Add Task
+  const addTask = async (newTask) => {
+    try {
+      const res = await axios.post("http://localhost:3000/todos/create", newTask, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTasks([...tasks, res.data]);
+    } catch (err) {
+      console.error("Error adding task:", err);
+    }
   };
 
-  const addTask = (newTask) => {
-    setTasks([
-      ...tasks,
-      {
-        id: tasks.length + 1,
-        ...newTask,
-      },
-    ]);
+  // Start Task (status → In Progress)
+  const startTask = async (id) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/todos/edit/${id}`,
+        { status: "In Progress" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTasks(tasks.map((task) => (task._id === id ? res.data : task)));
+    } catch (err) {
+      console.error("Error starting task:", err);
+    }
+  };
+
+  // Complete Task (status → Completed)
+  const completeTask = async (id) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/todos/edit/${id}`,
+        { status: "Completed" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTasks(tasks.map((task) => (task._id === id ? res.data : task)));
+    } catch (err) {
+      console.error("Error completing task:", err);
+    }
+  };
+
+  // Delete Task
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/todos/delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTasks(tasks.filter((task) => task._id !== id));
+    } catch (err) {
+      console.error("Error deleting task:", err);
+    }
   };
 
   const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (loading) {
+    return <div className="p-8">Loading tasks...</div>;
+  }
 
   return (
     <Router>
@@ -76,6 +118,7 @@ const App = () => {
                     onStartTask={startTask}
                     onCompleteTask={completeTask}
                     onAddTask={addTask}
+                    onDeleteTask={deleteTask}
                   />
                 }
               />

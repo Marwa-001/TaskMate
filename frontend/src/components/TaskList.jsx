@@ -1,59 +1,58 @@
-import { useState } from 'react';
-import TaskCard from './TaskCard';
-import AddTaskForm from './AddTaskForm';
+import React, { useEffect, useState } from "react";
+import TaskCard from "./TaskCard";
+import AddTaskForm from "./AddTaskForm";
 
-const TasksList = ({ title, tasks, onStartTask, onCompleteTask, onAddTask }) => {
-  const [isAdding, setIsAdding] = useState(false);
+const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
-  const handleAddButtonClick = () => {
-    setIsAdding(true);
+  // Fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/todos");
+      const data = await res.json();
+      setTasks(data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
   };
 
-  const handleFormSubmit = (newTask) => {
-    onAddTask(newTask);
-    setIsAdding(false);
-  };
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
-  const handleCancel = () => {
-    setIsAdding(false);
+  // Add newly created task without full reload
+  const handleTaskAdded = (newTask) => {
+    setTasks((prev) => [newTask, ...prev]);
+    setShowForm(false);
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
-          <span>{title}</span>
-          <span className="text-sm text-gray-500">· Today</span>
-        </h3>
-        {onAddTask && (
-          <button
-            className="text-blue-500 font-semibold flex items-center space-x-1 hover:text-blue-700 transition-colors cursor-pointer"
-            onClick={handleAddButtonClick}
-          >
-            <span className="text-2xl">+</span>
-            <span>Add task</span>
-          </button>
-        )}
+    <div className="task-list space-y-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">My Tasks</h2>
+        <button
+          onClick={() => setShowForm((prev) => !prev)}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          {showForm ? "Close" : "Add Task"}
+        </button>
       </div>
-      <div className="space-y-4">
-        {isAdding && onAddTask && (
-          <AddTaskForm onSubmit={handleFormSubmit} onCancel={handleCancel} />
-        )}
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onStartTask={onStartTask}
-              onCompleteTask={onCompleteTask}
-            />
-          ))
-        ) : (
-          <p className="text-center text-gray-500">No tasks to display.</p>
-        )}
-      </div>
+
+      {showForm && (
+        <AddTaskForm
+          onCancel={() => setShowForm(false)}
+          onTaskAdded={handleTaskAdded}
+        />
+      )}
+
+      {tasks.length === 0 ? (
+        <p className="text-gray-500">No tasks found</p>
+      ) : (
+        tasks.map((task) => <TaskCard key={task._id} task={task} />)
+      )}
     </div>
   );
 };
 
-export default TasksList;
+export default TaskList;

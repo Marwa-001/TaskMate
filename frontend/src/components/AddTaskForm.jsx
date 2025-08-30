@@ -1,34 +1,49 @@
 import { useState } from 'react';
 
-const AddTaskForm = ({ onSubmit, onCancel }) => {
+const AddTaskForm = ({ onCancel, onTaskAdded }) => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [content, setContent] = useState('');
   const [priority, setPriority] = useState('Low');
-  const [category, setCategory] = useState('Work'); // New state for category
+  const [category, setCategory] = useState('Work');
   const [dueDate, setDueDate] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !description || !dueDate || !category) {
+    if (!title || !content || !dueDate || !category) {
       alert('Please fill out all fields.');
       return;
     }
 
-    const newTask = {
-      title,
-      description,
-      priority,
-      category, // Include category in the new task object
-      dueDate,
-      status: 'Not Started',
-      image: 'https://placehold.co/120x80',
-      isCompleted: false,
-      assignedTo: {
-        name: 'Sundar Gurung',
-        avatar: 'https://placehold.co/32x32/E0E0E0/white?text=SG',
-      },
-    };
-    onSubmit(newTask);
+    try {
+      const response = await fetch('http://localhost:3000/api/todos/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // include auth header if your backend requires JWT
+          // 'Authorization': `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          title,
+          content, // 👈 changed from "description" to match backend schema
+          priority,
+          category,
+          duedate: dueDate,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to add task');
+      const savedTask = await response.json();
+
+      onTaskAdded(savedTask); // 👈 notify parent so UI updates
+      setTitle('');
+      setContent('');
+      setPriority('Low');
+      setCategory('Work');
+      setDueDate('');
+    } catch (err) {
+      console.error('Error adding task:', err);
+      alert('Failed to add task. Please try again.');
+    }
   };
 
   return (
@@ -46,10 +61,10 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="3"
             required

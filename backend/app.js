@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
     res.send(users)
 })
 
-app.use('/user', userRouter)
+app.use('/api/user', userRouter)
 app.use("/api/todos", todosRouter);
 
 app.listen(3000)

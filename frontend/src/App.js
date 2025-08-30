@@ -39,12 +39,10 @@ useEffect(() => {
   fetchTasks();
 }, []);
 
-
-
   // Add Task
   const addTask = async (newTask) => {
     try {
-      const res = await axios.post("http://localhost:3000/todos/create", newTask, {
+      const res = await axios.post("http://localhost:3000/api/todos/create", newTask, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks([...tasks, res.data]);
@@ -57,7 +55,7 @@ useEffect(() => {
   const startTask = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/todos/edit/${id}`,
+        `http://localhost:3000/api/todos/edit/${id}`,
         { status: "In Progress" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -71,7 +69,7 @@ useEffect(() => {
   const completeTask = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/todos/edit/${id}`,
+        `http://localhost:3000/api/todos/edit/${id}`,
         { status: "Completed" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -84,7 +82,7 @@ useEffect(() => {
   // Delete Task
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/todos/delete/${id}`, {
+      await axios.delete(`http://localhost:3000/api/todos/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(tasks.filter((task) => task._id !== id));

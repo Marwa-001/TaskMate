@@ -17,7 +17,8 @@ router.post('/register', registerUser)
 router.post('/logout', logout)
 
 router.get('/profile', isLoggedIn, (req, res) => {
-    res.send(req.user)
-})
+  res.json({ user: req.user });
+});
+
 
 module.exports = router

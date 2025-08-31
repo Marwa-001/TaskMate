@@ -2,28 +2,25 @@ import { priorityColors } from '../utils/priorityColors';
 import { Link, useLocation } from 'react-router-dom';
 
 const TaskCard = ({ task, onStartTask, onCompleteTask }) => {
-  // Map MongoDB fields
   const {
     _id,
     title,
-    content, // from DB
+    content,
     priority,
     status = "Pending",
     category,
     duedate,
-    image, // optional
-    isCompleted = false,
   } = task;
 
   const location = useLocation();
   const colors = priorityColors[priority] || { bg: 'bg-gray-100', text: 'text-gray-800' };
+  const isTaskCompleted = status === 'Completed';
 
   const contentBlock = (
-    <div className={`rounded-xl shadow-sm p-4 flex space-x-4 ${colors.bg}`}>
+    <div className={`rounded-xl shadow-sm p-4 flex space-x-4 ${isTaskCompleted ? 'bg-gray-100' : colors.bg} ${isTaskCompleted ? 'text-gray-500' : ''}`}>
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
-          <h4 className={`font-semibold ${colors.text}`}>{title}</h4>
-          {/* Conditional rendering based on task status */}
+          <h4 className={`font-semibold ${isTaskCompleted ? 'line-through text-gray-500' : colors.text}`}>{title}</h4>
           {status === 'Pending' && onStartTask && (
             <button
               onClick={(e) => {
@@ -38,7 +35,7 @@ const TaskCard = ({ task, onStartTask, onCompleteTask }) => {
           {status === 'In Progress' && onCompleteTask && (
             <input
               type="checkbox"
-              checked={isCompleted}
+              checked={isTaskCompleted}
               onChange={(e) => {
                 e.stopPropagation();
                 onCompleteTask(_id);
@@ -55,7 +52,7 @@ const TaskCard = ({ task, onStartTask, onCompleteTask }) => {
             />
           )}
         </div>
-        <p className="text-xs text-gray-600 mb-2">{content}</p>
+        <p className={`text-xs text-gray-600 mb-2 ${isTaskCompleted ? 'line-through' : ''}`}>{content}</p>
         <div className="flex flex-wrap gap-2 items-center text-[10px] text-gray-500">
           <span>
             Priority: <span className="font-medium text-black">{priority}</span>
@@ -74,13 +71,6 @@ const TaskCard = ({ task, onStartTask, onCompleteTask }) => {
             </span>
           )}
         </div>
-      </div>
-      <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">
-        <img
-          className="object-cover w-full h-full"
-          src={image || 'https://placehold.co/120x80'} // fallback
-          alt="Task"
-        />
       </div>
     </div>
   );

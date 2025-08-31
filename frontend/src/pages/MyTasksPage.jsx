@@ -3,7 +3,6 @@ import TaskList from '../components/TaskList';
 import TaskCard from '../components/TaskCard';
 
 const MyTasksPage = ({ tasks, onStartTask, onCompleteTask }) => {
-  // Filter for tasks that are not yet completed
   const myTasks = tasks.filter(task => !task.isCompleted);
 
   return (
@@ -12,8 +11,8 @@ const MyTasksPage = ({ tasks, onStartTask, onCompleteTask }) => {
       <TaskList
         title="All My Tasks"
         tasks={myTasks}
-        onStartTask={onStartTask}
-        onCompleteTask={onCompleteTask}
+        onStartTask={onStartTask} // 👈 Props passed down
+        onCompleteTask={onCompleteTask} // 👈 Props passed down
         allowNavigation={true}
       />
     </div>

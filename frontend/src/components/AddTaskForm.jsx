@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios'; // Import axios here
 
 const AddTaskForm = ({ onCancel, onTaskAdded }) => {
   const [title, setTitle] = useState('');
@@ -15,40 +16,45 @@ const AddTaskForm = ({ onCancel, onTaskAdded }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/todos/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // include auth header if your backend requires JWT
-          // 'Authorization': `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify({
+      // ✅ Retrieve the token from local storage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in again.');
+      }
+
+      // ✅ Use axios instead of fetch for consistency with other components
+      const res = await axios.post(
+        'http://localhost:3000/api/todos/create',
+        {
           title,
-          content, // 👈 changed from "description" to match backend schema
+          content,
           priority,
           category,
           duedate: dueDate,
-        }),
-      });
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Add the Authorization header
+          },
+        }
+      );
 
-      if (!response.ok) throw new Error('Failed to add task');
-      const savedTask = await response.json();
-
-      onTaskAdded(savedTask); // 👈 notify parent so UI updates
+      onTaskAdded(res.data);
       setTitle('');
       setContent('');
       setPriority('Low');
       setCategory('Work');
       setDueDate('');
-    } catch (err) {
-      console.error('Error adding task:', err);
+
+    } catch (error) {
+      console.error('Error adding task:', error);
       alert('Failed to add task. Please try again.');
     }
   };
 
   return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow-inner mb-4">
-      <h4 className="text-lg font-semibold text-gray-800 mb-4">Add a New Task</h4>
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <h3 className="text-xl font-semibold text-gray-800 mb-4">Add New Task</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -61,27 +67,28 @@ const AddTaskForm = ({ onCancel, onTaskAdded }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="3"
             required
-          ></textarea>
+          />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             >
-              <option value="Ultimate">Ultimate</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
               <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Ultimate">Ultimate</option>
             </select>
           </div>
           <div>
@@ -90,6 +97,7 @@ const AddTaskForm = ({ onCancel, onTaskAdded }) => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             >
               <option value="Work">Work</option>
               <option value="Personal">Personal</option>

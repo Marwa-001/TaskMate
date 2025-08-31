@@ -1,6 +1,6 @@
 import TaskCard from './TaskCard';
 
-const CompletedTasks = ({ tasks, onToggleTaskCompletion }) => {
+const CompletedTasks = ({ tasks, onStartTask, onCompleteTask }) => {
   return (
     <div className="bg-white rounded-3xl shadow-lg p-6">
       <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2 mb-4">
@@ -10,9 +10,10 @@ const CompletedTasks = ({ tasks, onToggleTaskCompletion }) => {
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskCard
-              key={task.id}
+              key={task._id} // Use _id as the key
               task={task}
-              onToggleCompletion={onToggleTaskCompletion}
+              onStartTask={onStartTask} // ✅ Prop name changed
+              onCompleteTask={onCompleteTask} // ✅ Prop name changed
             />
           ))
         ) : (

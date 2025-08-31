@@ -6,13 +6,11 @@ const userModel = require('../models/user-model');
 
 /**
  * @route GET /
- * @description Retrieves all to-dos. Populates the 'user' field and excludes the password.
- * @access Private (requires authentication via isLoggedIn middleware)
+ * @description Retrieves all to-dos.
  */
-router.get('/', async (req, res) => {
+router.get('/', isLoggedIn, async (req, res) => {
     try {
-        // Find all to-dos, populate the user reference, and exclude the password field for security.
-        const todos = await todoModel.find().populate('user', '-password');
+        const todos = await todoModel.find({ user: req.user._id }).populate('user', '-password');
         res.status(200).json(todos);
     } catch (error) {
         console.error('Error fetching todos:', error);
@@ -23,52 +21,51 @@ router.get('/', async (req, res) => {
 /**
  * @route POST /create
  * @description Creates a new to-do and associates it with the currently logged-in user.
- * @access Private (requires authentication via isLoggedIn middleware)
  */
 router.post('/create', isLoggedIn, async (req, res) => {
     try {
-        const { title, content, priority } = req.body;
-
-        // Find the logged-in user to link the new to-do.
-        // req.user is populated by the isLoggedIn middleware.
+        const { title, content, priority, category, duedate } = req.body;
         const user = await userModel.findOne({ email: req.user.email });
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        // Create the new to-do, ensuring the user ID is correctly assigned.
-        const todo = await todoModel.create({
+        const newTodo = new todoModel({
             title,
             content,
             priority,
-            user: user._id // This is a crucial link between the two models.
+            category,
+            duedate,
+            user: user._id,
+            isCompleted: false, // Default status for new tasks
         });
 
-        // Add the new to-do's ID to the user's todos array.
-        user.todos.push(todo._id);
+        const savedTodo = await newTodo.save();
+        user.todos.push(savedTodo._id);
         await user.save();
 
-        res.status(201).json(todo);
+        res.status(201).json(savedTodo);
     } catch (error) {
-        console.error('Error creating todo:', error);
+        console.error('Error creating to-do:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
+
 /**
  * @route PUT /edit/:id
- * @description Edits a to-do by its ID, ensuring it belongs to the logged-in user.
+ * @description Updates a to-do by its ID, ensuring it belongs to the logged-in user.
  * @access Private
- * @param {string} id - The ID of the to-do to edit.
+ * @param {string} id - The ID of the to-do to update.
  */
 router.put('/edit/:id', isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, priority, status } = req.body; // include status!
+    const { title, content, priority, status, isCompleted } = req.body;
 
     const todo = await todoModel.findOneAndUpdate(
       { _id: id, user: req.user._id },
-      { title, content, priority, status },   // update status too
+      { title, content, priority, status, isCompleted },
       { new: true, runValidators: true }
     );
 
@@ -93,20 +90,15 @@ router.put('/edit/:id', isLoggedIn, async (req, res) => {
 router.delete('/delete/:id', isLoggedIn, async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Find and delete the to-do, but only if it belongs to the authenticated user.
         const todo = await todoModel.findOneAndDelete({ _id: id, user: req.user._id });
 
         if (!todo) {
             return res.status(404).json({ message: 'To-do not found or user not authorized.' });
         }
 
-        // Remove the to-do reference from the user's document
-        await userModel.findByIdAndUpdate(req.user._id, {
-            $pull: { todos: id }
-        });
+        await userModel.findByIdAndUpdate(req.user._id, { $pull: { todos: id } });
 
-        res.status(200).json({ message: 'To-do successfully deleted.' });
+        res.status(200).json({ message: 'To-do deleted successfully.' });
     } catch (error) {
         console.error('Error deleting to-do:', error);
         res.status(500).json({ message: 'Internal Server Error' });

@@ -55,7 +55,6 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (authToken) => {
-    // Set token and immediately fetch user data
     localStorage.setItem('token', authToken);
     setToken(authToken);
     const userData = await fetchUser(authToken);
@@ -101,33 +100,26 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-async function handleLogin(e) {
-  e.preventDefault();
-  try {
-    const res = await fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      // ✅ Use context login so token + user state update properly
-      await login(data.token);
-
-      // ✅ Use navigate instead of hard refresh
-      navigate("/dashboard");
-    } else {
-      setError(data.message || "Login failed");
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        await login(data.token);
+        navigate("/dashboard");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Failed to connect to server.");
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    setError("Failed to connect to server.");
   }
-}
-
-
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#F5F8FF] font-inter">
@@ -137,32 +129,13 @@ async function handleLogin(e) {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email</label>
-            <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="password">Password</label>
-            <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Log In
-          </button>
+          <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Log In</button>
         </form>
         <p className="mt-6 text-center text-gray-600">
           Don't have an account? <span onClick={() => navigate('/signup')} className="text-blue-600 font-semibold hover:underline cursor-pointer">Sign Up</span>
@@ -204,43 +177,17 @@ const Signup = () => {
         <form onSubmit={handleSignup}>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="name">Name</label>
-            <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+            <input className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email</label>
-            <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="password">Password</label>
-            <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Sign Up
-          </button>
+          <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Sign Up</button>
         </form>
         <p className="mt-6 text-center text-gray-600">
           Already have an account? <span onClick={() => navigate('/login')} className="text-blue-600 font-semibold hover:underline cursor-pointer">Log In</span>
@@ -251,114 +198,87 @@ const Signup = () => {
 };
 
 // =================================================================
-// PLACEHOLDER COMPONENTS FOR YOUR FILES
-// =================================================================
-// const Header = () => <div>Header Placeholder</div>;
-// const Sidebar = () => <div>Sidebar Placeholder</div>;
-// const MainContent = () => <div>MainContent Placeholder</div>;
-// const VitalTasksPage = () => <div>VitalTasksPage Placeholder</div>;
-// const MyTasksPage = () => <div>MyTasksPage Placeholder</div>;
-// const TaskDetailPage = () => <div>TaskDetailPage Placeholder</div>;
-// const TaskCategoriesPage = () => <div>TaskCategoriesPage Placeholder</div>;
-// const CategoryTasksPage = () => <div>CategoryTasksPage Placeholder</div>;
-
-// =================================================================
 // MAIN APP COMPONENT
 // =================================================================
 const App = () => {
   const { token, loading: authLoading } = useAuth();
   const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [dataLoading, setDataLoading] = useState(true);
+  const location = useLocation();
 
-  // Fetch tasks from backend, now with authentication
+  const fetchTasks = async () => {
+    if (!token) {
+      setDataLoading(false);
+      return;
+    }
+    try {
+      const res = await axios.get("http://localhost:3000/api/todos", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTasks(res.data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    } finally {
+      setDataLoading(false);
+    }
+  };
+
+  const addTask = async (newTask) => {
+    // try {
+    //   const res = await axios.post("http://localhost:3000/api/todos/create", newTask, {
+    //     headers: { Authorization: `Bearer ${token}` }
+    //   });
+    //   setTasks([...tasks, res.data]);
+      fetchTasks(); // ✅ Re-fetch tasks to ensure all data is up-to-date
+    // } catch (err) {
+    //   console.error("Error adding task:", err);
+    // }
+  };
+
+  const updateTaskStatus = async (id, newStatus) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/api/todos/edit/${id}`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data) {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task._id === id ? { ...task, status: newStatus } : task
+          )
+        );
+      }
+    } catch (err) {
+      console.error(`Error updating task status to ${newStatus}:`, err);
+    }
+  };
+
+  const startTask = (id) => updateTaskStatus(id, "In Progress");
+  const completeTask = (id) => updateTaskStatus(id, "Completed");
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      if (!token) {
-        setDataLoading(false);
-        return;
-      }
-      try {
-        const res = await axios.get("http://localhost:3000/api/todos", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTasks(res.data);
-      } catch (err) {
-        console.error("Error fetching tasks:", err);
-      } finally {
-        setDataLoading(false);
-      }
-    };
     fetchTasks();
   }, [token]);
-
-  // Add Task
-  const addTask = async (newTask) => {
-    try {
-      const res = await axios.post("http://localhost:3000/api/todos/create", newTask, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setTasks([...tasks, res.data]);
-    } catch (err) {
-      console.error("Error adding task:", err);
-    }
-  };
-
-  // Start Task (status → In Progress)
-  const startTask = async (id) => {
-    try {
-      const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${id}`,
-        { status: "In Progress" },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTasks(tasks.map((task) => (task._id === id ? res.data : task)));
-    } catch (err) {
-      console.error("Error starting task:", err);
-    }
-  };
-
-  // Complete Task (status → Completed)
-  const completeTask = async (id) => {
-    try {
-      const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${id}`,
-        { status: "Completed" },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTasks(tasks.map((task) => (task._id === id ? res.data : task)));
-    } catch (err) {
-      console.error("Error completing task:", err);
-    }
-  };
-
-  // Delete Task
-  const deleteTask = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3000/api/todos/delete/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setTasks(tasks.filter((task) => task._id !== id));
-    } catch (err) {
-      console.error("Error deleting task:", err);
-    }
-  };
-
-  const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   if (authLoading || dataLoading) {
     return <div className="p-8">Loading...</div>;
   }
 
+  // ✅ Pass all necessary functions to MainContent
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const hideLayout = location.pathname === "/login" || location.pathname === "/signup";
+
   return (
-    <div className="flex flex-col h-screen bg-[#F5F8FF] p-8 font-inter">
-      <Header onSearchChange={setSearchQuery} />
-      <div className="flex flex-1 mt-8">
-        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
-        <div className="flex-1 flex flex-col pl-8 overflow-y-auto">
+    <div className="flex flex-col h-screen bg-[#F5F8FF] font-inter">
+      {!hideLayout && <Header onSearchChange={setSearchQuery} />}
+      <div className={`flex flex-1 ${!hideLayout ? "mt-8" : ""}`}>
+        {!hideLayout && <Sidebar />}
+        <div className={`flex-1 flex flex-col ${!hideLayout ? "pl-8 overflow-y-auto" : ""}`}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -367,29 +287,20 @@ const App = () => {
               <PrivateRoute>
                 <MainContent
                   tasks={filteredTasks}
-                  onStartTask={startTask}
-                  onCompleteTask={completeTask}
-                  onAddTask={addTask}
-                  onDeleteTask={deleteTask}
+                  onAddTask={addTask} // ✅ Added this
+                  onStartTask={startTask} // ✅ Added this
+                  onCompleteTask={completeTask} // ✅ Added this
                 />
               </PrivateRoute>
             } />
             <Route path="/vital-tasks" element={
               <PrivateRoute>
-                <VitalTasksPage
-                  tasks={tasks}
-                  onStartTask={startTask}
-                  onCompleteTask={completeTask}
-                />
+                <VitalTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} />
               </PrivateRoute>
             } />
             <Route path="/my-tasks" element={
               <PrivateRoute>
-                <MyTasksPage
-                  tasks={tasks}
-                  onStartTask={startTask}
-                  onCompleteTask={completeTask}
-                />
+                <MyTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} />
               </PrivateRoute>
             } />
             <Route path="/task-categories" element={
@@ -399,12 +310,12 @@ const App = () => {
             } />
             <Route path="/:taskType/:taskId" element={
               <PrivateRoute>
-                <TaskDetailPage tasks={tasks} onCompleteTask={completeTask} />
+                <TaskDetailPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask}/>
               </PrivateRoute>
             } />
             <Route path="/categories/:categoryName" element={
               <PrivateRoute>
-                <CategoryTasksPage tasks={tasks} onCompleteTask={completeTask} />
+                <CategoryTasksPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask} />
               </PrivateRoute>
             } />
           </Routes>

@@ -11,8 +11,8 @@ const VitalTasksPage = ({ tasks, onStartTask, onCompleteTask }) => {
       <TaskList
         title="Urgent & Important"
         tasks={vitalTasks}
-        onStartTask={onStartTask}
-        onCompleteTask={onCompleteTask}
+        onStartTask={onStartTask} // 👈 Props passed down
+        onCompleteTask={onCompleteTask} // 👈 Props passed down
         allowNavigation={true}
       />
     </div>

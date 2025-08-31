@@ -31,7 +31,7 @@ const TaskStatus = ({ tasks }) => {
           color="red"
         />
       </div>
-      <div className="flex flex-col space-y-2 mt-4">
+      <div className="flex space-x-14 mt-4">
         <StatusLegend color="green" label="Completed" />
         <StatusLegend color="blue" label="In Progress" />
         <StatusLegend color="red" label="Not Started" />

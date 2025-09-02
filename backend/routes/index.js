@@ -52,6 +52,8 @@ router.post('/create', isLoggedIn, async (req, res) => {
 });
 
 
+// src/routes/index.js
+
 /**
  * @route PUT /edit/:id
  * @description Updates a to-do by its ID, ensuring it belongs to the logged-in user.
@@ -61,11 +63,13 @@ router.post('/create', isLoggedIn, async (req, res) => {
 router.put('/edit/:id', isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, priority, status, isCompleted } = req.body;
+    // ✅ Include 'duedate' in the destructured properties from req.body
+    const { title, content, priority, status, isCompleted, duedate } = req.body;
 
     const todo = await todoModel.findOneAndUpdate(
       { _id: id, user: req.user._id },
-      { title, content, priority, status, isCompleted },
+      // ✅ Add 'duedate' to the update object
+      { title, content, priority, status, isCompleted, duedate },
       { new: true, runValidators: true }
     );
 

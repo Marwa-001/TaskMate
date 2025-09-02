@@ -252,6 +252,35 @@ const App = () => {
     }
   };
 
+  const deleteTask = async (taskId) => {
+    try {
+        await axios.delete(`http://localhost:3000/api/todos/delete/${taskId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        setTasks(tasks.filter(task => task._id !== taskId));
+    } catch (err) {
+        console.error("Error deleting task:", err);
+        alert("Failed to delete task. Please try again.");
+    }
+  };
+
+  // ✅ New function to handle editing a task on the server
+  const editTask = async (taskId, updatedTaskData) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3000/api/todos/edit/${taskId}`,
+        updatedTaskData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data) {
+        setTasks(tasks.map(task => task._id === taskId ? res.data : task));
+      }
+    } catch (err) {
+      console.error("Error editing task:", err);
+      alert("Failed to edit task. Please try again.");
+    }
+  };
+
   const startTask = (id) => updateTaskStatus(id, "In Progress");
   const completeTask = (id) => updateTaskStatus(id, "Completed");
 
@@ -291,17 +320,19 @@ const App = () => {
                   onAddTask={addTask}
                   onStartTask={startTask}
                   onCompleteTask={completeTask}
+                  onEditTask={editTask}
+                  onDeleteTask={deleteTask}
                 />
               </PrivateRoute>
             } />
             <Route path="/vital-tasks" element={
               <PrivateRoute>
-                <VitalTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} />
+                <VitalTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} onEditTask={editTask} onDeleteTask={deleteTask} />
               </PrivateRoute>
             } />
             <Route path="/my-tasks" element={
               <PrivateRoute>
-                <MyTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} />
+                <MyTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} onEditTask={editTask} onDeleteTask={deleteTask} />
               </PrivateRoute>
             } />
             <Route path="/task-categories" element={
@@ -311,12 +342,12 @@ const App = () => {
             } />
             <Route path="/:taskType/:taskId" element={
               <PrivateRoute>
-                <TaskDetailPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask}/>
+                <TaskDetailPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask} onEditTask={editTask} onDeleteTask={deleteTask} />
               </PrivateRoute>
             } />
             <Route path="/categories/:categoryName" element={
               <PrivateRoute>
-                <CategoryTasksPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask} />
+                <CategoryTasksPage tasks={tasks} onCompleteTask={completeTask} onStartTask={startTask} onEditTask={editTask} onDeleteTask={deleteTask} />
               </PrivateRoute>
             } />
           </Routes>

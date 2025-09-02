@@ -1,12 +1,34 @@
-import { useState } from 'react';
-import axios from 'axios'; // Import axios here
+// src/components/AddTaskForm.jsx
 
-const AddTaskForm = ({ onCancel, onTaskAdded }) => {
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const AddTaskForm = ({ onCancel, onTaskAdded, onUpdateTask, taskToEdit }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [priority, setPriority] = useState('Low');
   const [category, setCategory] = useState('Work');
   const [dueDate, setDueDate] = useState('');
+
+  useEffect(() => {
+    if (taskToEdit) {
+      // ✅ Properly format the date for the input field
+      const formattedDate = taskToEdit.duedate ? new Date(taskToEdit.duedate).toISOString().split('T')[0] : '';
+      
+      setTitle(taskToEdit.title || '');
+      setContent(taskToEdit.content || '');
+      setPriority(taskToEdit.priority || 'Low');
+      setCategory(taskToEdit.category || 'Work');
+      setDueDate(formattedDate);
+    } else {
+      // Clear the form for a new task
+      setTitle('');
+      setContent('');
+      setPriority('Low');
+      setCategory('Work');
+      setDueDate('');
+    }
+  }, [taskToEdit]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,46 +37,28 @@ const AddTaskForm = ({ onCancel, onTaskAdded }) => {
       return;
     }
 
-    try {
-      // ✅ Retrieve the token from local storage
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found. Please log in again.');
-      }
+    const newTaskData = {
+      title,
+      content,
+      priority,
+      category,
+      duedate: dueDate,
+    };
 
-      // ✅ Use axios instead of fetch for consistency with other components
-      const res = await axios.post(
-        'http://localhost:3000/api/todos/create',
-        {
-          title,
-          content,
-          priority,
-          category,
-          duedate: dueDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // ✅ Add the Authorization header
-          },
-        }
-      );
-
-      onTaskAdded(res.data);
-      setTitle('');
-      setContent('');
-      setPriority('Low');
-      setCategory('Work');
-      setDueDate('');
-
-    } catch (error) {
-      console.error('Error adding task:', error);
-      alert('Failed to add task. Please try again.');
+    if (taskToEdit) {
+      // ✅ This is an update operation
+      onUpdateTask({ ...taskToEdit, ...newTaskData });
+    } else {
+      // ✅ This is a new task creation operation
+      onTaskAdded(newTaskData);
     }
   };
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">Add New Task</h3>
+      <h3 className="text-xl font-semibold text-gray-800 mb-4">
+        {taskToEdit ? 'Edit Task' : 'Add New Task'}
+      </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -132,7 +136,7 @@ const AddTaskForm = ({ onCancel, onTaskAdded }) => {
             type="submit"
             className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
           >
-            Add Task
+            {taskToEdit ? 'Update Task' : 'Add Task'}
           </button>
         </div>
       </form>

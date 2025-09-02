@@ -5,10 +5,29 @@ import CompletedTasks from './CompletedTasks';
 import AddTaskForm from './AddTaskForm';
 import { useState } from 'react';
 
-const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask }) => {
+const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask, onDeleteTask }) => {
   const [showForm, setShowForm] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null); // ✅ New state to track the task being edited
+
+  // ✅ New handler for editing a task
+  const handleEditTask = (taskId) => {
+    const task = tasks.find(t => t._id === taskId);
+    if (task) {
+      setTaskToEdit(task); // Set the task to be edited
+      setShowForm(true);    // Show the form
+    }
+  };
+
+  const handleUpdateTask = (updatedTask) => {
+    onEditTask(updatedTask._id, updatedTask);
+    setTaskToEdit(null); // Clear the edit state
+    setShowForm(false);  // Hide the form
+  };
 
   const toggleForm = () => {
+    if (showForm) {
+      setTaskToEdit(null); // Clear the edit state if the form is closed
+    }
     setShowForm(!showForm);
   };
 
@@ -17,7 +36,7 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask }) => {
     setShowForm(false);
   };
 
-  // ✅ Filter tasks based on the 'status' property
+  // Filter tasks based on the 'status' property
   const pendingTasks = tasks.filter((task) => task.status !== 'Completed');
   const completedTasks = tasks.filter((task) => task.status === 'Completed');
 
@@ -35,7 +54,12 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask }) => {
 
       {showForm && (
         <div className="mb-8">
-          <AddTaskForm onCancel={toggleForm} onTaskAdded={handleTaskAdded} />
+          <AddTaskForm
+            onCancel={toggleForm}
+            onTaskAdded={handleTaskAdded}
+            onUpdateTask={handleUpdateTask} // ✅ Pass the new prop
+            taskToEdit={taskToEdit}         // ✅ Pass the task data for editing
+          />
         </div>
       )}
 
@@ -45,17 +69,21 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask }) => {
           <div className="space-y-8">
             <TasksList
               title="To-Do"
-              tasks={pendingTasks} // Pass the filtered pending tasks
+              tasks={pendingTasks}
               onStartTask={onStartTask}
               onCompleteTask={onCompleteTask}
+              onEditTask={handleEditTask}      // ✅ Use the new handler
+              onDeleteTask={onDeleteTask}
             />
           </div>
           <div className="space-y-8">
             <TaskStatus tasks={tasks} />
             <CompletedTasks
-              tasks={completedTasks} // Pass the filtered completed tasks
+              tasks={completedTasks}
               onStartTask={onStartTask}
               onCompleteTask={onCompleteTask}
+              onEditTask={handleEditTask}      // ✅ Use the new handler
+              onDeleteTask={onDeleteTask}
             />
           </div>
         </div>

@@ -206,6 +206,11 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [dataLoading, setDataLoading] = useState(true);
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const fetchTasks = async () => {
     if (!token) {
@@ -225,15 +230,7 @@ const App = () => {
   };
 
   const addTask = async (newTask) => {
-    // try {
-    //   const res = await axios.post("http://localhost:3000/api/todos/create", newTask, {
-    //     headers: { Authorization: `Bearer ${token}` }
-    //   });
-    //   setTasks([...tasks, res.data]);
-      fetchTasks(); // ✅ Re-fetch tasks to ensure all data is up-to-date
-    // } catch (err) {
-    //   console.error("Error adding task:", err);
-    // }
+    fetchTasks();
   };
 
   const updateTaskStatus = async (id, newStatus) => {
@@ -266,7 +263,6 @@ const App = () => {
     return <div className="p-8">Loading...</div>;
   }
 
-  // ✅ Pass all necessary functions to MainContent
   const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -275,10 +271,15 @@ const App = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[#F5F8FF] font-inter">
-      {!hideLayout && <Header onSearchChange={setSearchQuery} />}
-      <div className={`flex flex-1 ${!hideLayout ? "mt-8" : ""}`}>
-        {!hideLayout && <Sidebar />}
-        <div className={`flex-1 flex flex-col ${!hideLayout ? "pl-8 overflow-y-auto" : ""}`}>
+      {!hideLayout && <Header onSearchChange={setSearchQuery} toggleSidebar={toggleSidebar} />}
+      <div className={`flex flex-1 ${!hideLayout ? "mt-24" : ""}`}>
+        {!hideLayout && (
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+          />
+        )}
+        <div className={`flex-1 flex flex-col md:pl-64 ${!hideLayout ? "pl-8 overflow-y-auto" : ""} md:pl-0`}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -287,9 +288,9 @@ const App = () => {
               <PrivateRoute>
                 <MainContent
                   tasks={filteredTasks}
-                  onAddTask={addTask} // ✅ Added this
-                  onStartTask={startTask} // ✅ Added this
-                  onCompleteTask={completeTask} // ✅ Added this
+                  onAddTask={addTask}
+                  onStartTask={startTask}
+                  onCompleteTask={completeTask}
                 />
               </PrivateRoute>
             } />

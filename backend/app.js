@@ -7,6 +7,8 @@ const todosRouter = require('./routes/index')
 const db = require('./config/mongoose-collection')
 const cookieParser = require('cookie-parser')
 const cors = require("cors");
+// 🔔 Start the notification service
+require('./notificationService');
 
 app.use(cors({
   origin: "http://localhost:3001",  // your React dev server

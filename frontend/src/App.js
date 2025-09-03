@@ -230,7 +230,21 @@ const App = () => {
   };
 
   const addTask = async (newTask) => {
-    fetchTasks();
+    try {
+      if (!token) {
+        throw new Error('Authentication token not found.');
+      }
+      await axios.post(
+        "http://localhost:3000/api/todos/create",
+        newTask, // 👈 Pass the new task data here
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      fetchTasks(); // ✅ Now, fetch tasks after a successful creation
+    } catch (err) {
+      console.error("Error adding task:", err);
+    }
   };
 
   const updateTaskStatus = async (id, newStatus) => {

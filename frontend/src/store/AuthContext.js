@@ -15,10 +15,10 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:3000/api/users/me", {
+        const res = await axios.get("http://localhost:3000/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setUser(res.data);
+        setUser(res.data.user);
       } catch (err) {
         console.error("Failed to fetch user data:", err);
         localStorage.removeItem('token');

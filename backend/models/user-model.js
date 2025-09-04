@@ -7,7 +7,11 @@ const userSchema = mongoose.Schema({
     todos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "todo"
-    }]
+    }],
+    profilePhoto: {
+    type: String,
+    default: "/uploads/default-avatar.png" // placeholder
+  }
 })
 
 module.exports = mongoose.model("user", userSchema)

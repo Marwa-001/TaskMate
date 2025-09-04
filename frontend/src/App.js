@@ -9,72 +9,73 @@ import MyTasksPage from './pages/MyTasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import TaskCategoriesPage from './pages/TaskCategoriesPage';
 import CategoryTasksPage from './pages/CategoryTasksPage';
+import { useAuth, AuthProvider } from './store/AuthContext'; // ✅ import here
 
 // =================================================================
 // AUTHENTICATION CONTEXT (Now part of this file)
 // =================================================================
-const AuthContext = createContext();
+// const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+// const AuthProvider = ({ children }) => {
+//   const [token, setToken] = useState(localStorage.getItem('token') || null);
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
 
-  // Function to fetch user data
-  const fetchUser = async (authToken) => {
-    try {
-      if (!authToken) {
-        return null;
-      }
-      const res = await axios.get("http://localhost:3000/api/user/profile", {
-        headers: { Authorization: `Bearer ${authToken}` }
-      });
-      return res.data;
-    } catch (err) {
-      console.error("Failed to fetch user data:", err);
-      localStorage.removeItem('token');
-      setToken(null);
-      return null;
-    }
-  };
+//   // Function to fetch user data
+//   const fetchUser = async (authToken) => {
+//     try {
+//       if (!authToken) {
+//         return null;
+//       }
+//       const res = await axios.get("http://localhost:3000/api/user/profile", {
+//         headers: { Authorization: `Bearer ${authToken}` }
+//       });
+//       return res.data;
+//     } catch (err) {
+//       console.error("Failed to fetch user data:", err);
+//       localStorage.removeItem('token');
+//       setToken(null);
+//       return null;
+//     }
+//   };
 
-  useEffect(() => {
-    // Initial fetch on component mount
-    const loadUser = async () => {
-      const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        const userData = await fetchUser(storedToken);
-        if (userData) {
-          setToken(storedToken);
-          setUser(userData);
-        }
-      }
-      setLoading(false);
-    };
-    loadUser();
-  }, []);
+//   useEffect(() => {
+//     // Initial fetch on component mount
+//     const loadUser = async () => {
+//       const storedToken = localStorage.getItem('token');
+//       if (storedToken) {
+//         const userData = await fetchUser(storedToken);
+//         if (userData) {
+//           setToken(storedToken);
+//           setUser(userData);
+//         }
+//       }
+//       setLoading(false);
+//     };
+//     loadUser();
+//   }, []);
 
-  const login = async (authToken) => {
-    localStorage.setItem('token', authToken);
-    setToken(authToken);
-    const userData = await fetchUser(authToken);
-    setUser(userData);
-  };
+//   const login = async (authToken) => {
+//     localStorage.setItem('token', authToken);
+//     setToken(authToken);
+//     const userData = await fetchUser(authToken);
+//     setUser(userData);
+//   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem('token');
-  };
+//   const logout = () => {
+//     setToken(null);
+//     setUser(null);
+//     localStorage.removeItem('token');
+//   };
 
-  return (
-    <AuthContext.Provider value={{ token, user, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//   return (
+//     <AuthContext.Provider value={{ token, user, login, logout, loading }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
 
-const useAuth = () => useContext(AuthContext);
+// const useAuth = () => useContext(AuthContext);
 
 // =================================================================
 // PRIVATE ROUTE COMPONENT
@@ -381,5 +382,6 @@ const RootApp = () => (
     </AuthProvider>
   </Router>
 );
+
 
 export default RootApp;

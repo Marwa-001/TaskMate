@@ -18,6 +18,10 @@ const todoSchema = mongoose.Schema({
   },
   priority: String,
   category: String,
+  collaborators: [{ // 👈 New field for collaborators
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  }],
 });
 
 module.exports = mongoose.model("todo", todoSchema)

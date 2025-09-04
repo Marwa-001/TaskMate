@@ -109,4 +109,54 @@ router.delete('/delete/:id', isLoggedIn, async (req, res) => {
     }
 });
 
+
+/**
+ * @route POST /share/:id
+ * @description Adds a collaborator to a to-do, ensuring the user exists.
+ * @access Private
+ * @param {string} id - The ID of the to-do to share.
+ */
+router.post('/share/:id', isLoggedIn, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { collaboratorEmail } = req.body;
+
+        if (!collaboratorEmail) {
+            return res.status(400).json({ message: 'Collaborator email is required.' });
+        }
+
+        // 1. Find the collaborator by email
+        const collaborator = await userModel.findOne({ email: collaboratorEmail });
+        if (!collaborator) {
+            return res.status(404).json({ message: 'User not found. Please ensure the email is correct.' });
+        }
+
+        // 2. Find the task to share, ensuring the current user is the owner
+        const todo = await todoModel.findOne({ _id: id, user: req.user._id });
+        if (!todo) {
+            return res.status(404).json({ message: 'To-do not found or you are not the owner.' });
+        }
+
+        // 3. Prevent sharing with self
+        if (collaborator._id.toString() === req.user._id.toString()) {
+            return res.status(400).json({ message: 'You cannot share a task with yourself.' });
+        }
+        
+        // 4. Check if collaborator is already on the list
+        if (todo.collaborators.includes(collaborator._id)) {
+            return res.status(400).json({ message: 'User is already a collaborator.' });
+        }
+
+        // 5. Add the collaborator to the task's collaborators array
+        todo.collaborators.push(collaborator._id);
+        await todo.save();
+
+        res.status(200).json({ message: 'Collaborator added successfully.', todo });
+
+    } catch (error) {
+        console.error('Error sharing to-do:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;

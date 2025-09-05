@@ -311,19 +311,19 @@ const App = () => {
     task.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const hideLayout = location.pathname === "/login" || location.pathname === "/signup";
+const hideLayout = location.pathname === "/login" || location.pathname === "/signup";
 
   return (
     <div className="flex flex-col h-screen bg-[#F5F8FF] font-inter">
       {!hideLayout && <Header onSearchChange={setSearchQuery} toggleSidebar={toggleSidebar} />}
-      <div className={`flex flex-1 ${!hideLayout ? "mt-24" : ""}`}>
+      <div className={`flex flex-1 ${!hideLayout ? "mt-24 md:pl-64" : ""}`}> {/* 👈 Corrected line */}
         {!hideLayout && (
           <Sidebar
             isSidebarOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
           />
         )}
-        <div className={`flex-1 flex flex-col md:pl-64 ${!hideLayout ? "pl-8 overflow-y-auto" : ""} md:pl-0`}>
+        <div className={`flex-1 flex flex-col ${!hideLayout ? "pl-8 overflow-y-auto" : ""} md:pl-0`}> {/* 👈 The issue is here too, remove md:pl-0 as it overwrites your padding */}
           <Routes>
             <Route path="/" element={
             <PrivateRoute>

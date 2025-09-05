@@ -1,7 +1,8 @@
+// src/components/TaskList.jsx
 import React from "react";
 import TaskCard from "./TaskCard";
 
-const TaskList = ({ title, tasks, onStartTask, onCompleteTask, onEditTask, onDeleteTask }) => {
+const TaskList = ({ title, tasks, onStartTask, onCompleteTask, onEditTask, onDeleteTask, onTaskUpdated }) => {
   return (
     <div className="task-list space-y-4">
       <div className="flex justify-between items-center mb-4">
@@ -14,8 +15,9 @@ const TaskList = ({ title, tasks, onStartTask, onCompleteTask, onEditTask, onDel
             task={task}
             onStartTask={onStartTask}
             onCompleteTask={onCompleteTask}
-            onEditTask={onEditTask} // ✅ Pass the new prop
-            onDeleteTask={onDeleteTask} // ✅ Pass the new prop
+            onEditTask={onEditTask}
+            onDeleteTask={onDeleteTask}
+            onTaskUpdated={onTaskUpdated} // 👈 Pass the new prop here
           />
         ))
       ) : (

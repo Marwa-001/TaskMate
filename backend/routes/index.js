@@ -4,13 +4,25 @@ const todoModel = require('../models/todo-model');
 const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const userModel = require('../models/user-model');
 
+
 /**
  * @route GET /
- * @description Retrieves all to-dos.
+ * @description Retrieves all to-dos for the logged-in user, including shared tasks.
  */
 router.get('/', isLoggedIn, async (req, res) => {
     try {
-        const todos = await todoModel.find({ user: req.user._id }).populate('user', '-password');
+        // ✅ Corrected query: Find tasks where the user is either the owner or a collaborator
+        const todos = await todoModel
+            .find({
+                $or: [
+                    { user: req.user._id },
+                    { collaborators: req.user._id }
+                ]
+            })
+            // ✅ Populate both the user and collaborators fields
+            .populate('user', '-password')
+            .populate('collaborators', '-password');
+
         res.status(200).json(todos);
     } catch (error) {
         console.error('Error fetching todos:', error);
@@ -155,6 +167,40 @@ router.post('/share/:id', isLoggedIn, async (req, res) => {
 
     } catch (error) {
         console.error('Error sharing to-do:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+/**
+ * @route DELETE /:id/collaborators/:collaboratorId
+ * @description Removes a collaborator from a specific to-do.
+ */
+router.delete('/:id/collaborators/:collaboratorId', isLoggedIn, async (req, res) => {
+    try {
+        const { id, collaboratorId } = req.params;
+
+        // 1. Find the task and ensure the current user is the owner
+        const todo = await todoModel.findOne({ _id: id, user: req.user._id });
+
+        if (!todo) {
+            return res.status(404).json({ message: 'To-do not found or you are not the owner.' });
+        }
+
+        // 2. Remove the collaborator's ID from the collaborators array
+        const initialCollaboratorCount = todo.collaborators.length;
+        todo.collaborators.pull(collaboratorId); // Mongoose's .pull() method is perfect for this
+
+        // 3. Check if a collaborator was actually removed
+        if (todo.collaborators.length === initialCollaboratorCount) {
+            return res.status(404).json({ message: 'Collaborator not found on this task.' });
+        }
+
+        await todo.save();
+
+        res.status(200).json({ message: 'Collaborator removed successfully.' });
+
+    } catch (error) {
+        console.error('Error removing collaborator:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });

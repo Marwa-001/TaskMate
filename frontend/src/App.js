@@ -325,6 +325,19 @@ const App = () => {
         )}
         <div className={`flex-1 flex flex-col md:pl-64 ${!hideLayout ? "pl-8 overflow-y-auto" : ""} md:pl-0`}>
           <Routes>
+            <Route path="/" element={
+            <PrivateRoute>
+              <MainContent
+                tasks={filteredTasks}
+                onStartTask={startTask}
+                onCompleteTask={completeTask}
+                onAddTask={addTask}
+                onEditTask={editTask}
+                onDeleteTask={deleteTask}
+                fetchTasks={fetchTasks} 
+              />
+            </PrivateRoute>
+          } />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -337,6 +350,7 @@ const App = () => {
                   onCompleteTask={completeTask}
                   onEditTask={editTask}
                   onDeleteTask={deleteTask}
+                  fetchTasks={fetchTasks} 
                 />
               </PrivateRoute>
             } />

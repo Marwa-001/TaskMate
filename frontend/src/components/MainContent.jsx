@@ -36,20 +36,20 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
     setShowForm(false);
   };
 
-  // 👈 New handler to re-fetch tasks after a collaborator is added
   const handleTaskUpdated = () => {
     fetchTasks();
   };
 
-  const pendingTasks = tasks.filter((task) => task.status === 'Pending' || task.status === 'In Progress');
-  const completedTasks = tasks.filter((task) => task.status === 'Completed');
+  const pendingTasks = tasks.filter(task => task.status === 'Pending');
+  const completedTasks = tasks.filter(task => task.status === 'Completed');
 
   return (
-    <div className="flex-1 p-6 pb-20 overflow-y-auto">
+    <div className="flex flex-col p-8 md:p-12 h-full">
       <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
         <button
           onClick={toggleForm}
-          className="bg-blue-600 text-white px-6 py-2 rounded-xl text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg"
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg text-sm"
         >
           {showForm ? 'Cancel' : 'Add Task'}
         </button>
@@ -77,7 +77,7 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
               onCompleteTask={onCompleteTask}
               onEditTask={handleEditTask}
               onDeleteTask={onDeleteTask}
-              onTaskUpdated={handleTaskUpdated} // 👈 Pass the new handler
+              onTaskUpdated={handleTaskUpdated}
             />
           </div>
           <div className="space-y-8">
@@ -88,7 +88,7 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
               onCompleteTask={onCompleteTask}
               onEditTask={handleEditTask}
               onDeleteTask={onDeleteTask}
-              onTaskUpdated={handleTaskUpdated} // 👈 Pass the new handler
+              onTaskUpdated={handleTaskUpdated}
             />
           </div>
         </div>

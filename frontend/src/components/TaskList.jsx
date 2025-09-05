@@ -17,7 +17,7 @@ const TaskList = ({ title, tasks, onStartTask, onCompleteTask, onEditTask, onDel
             onCompleteTask={onCompleteTask}
             onEditTask={onEditTask}
             onDeleteTask={onDeleteTask}
-            onTaskUpdated={onTaskUpdated} // 👈 Pass the new prop here
+            onTaskUpdated={onTaskUpdated}
           />
         ))
       ) : (

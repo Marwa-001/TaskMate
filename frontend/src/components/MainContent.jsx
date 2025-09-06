@@ -41,6 +41,7 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
   };
 
   const pendingTasks = tasks.filter(task => task.status === 'Pending');
+  const inProgressTasks = tasks.filter(task => task.status === 'In Progress');
   const completedTasks = tasks.filter(task => task.status === 'Completed');
 
   return (
@@ -79,6 +80,15 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
               onDeleteTask={onDeleteTask}
               onTaskUpdated={handleTaskUpdated}
             />
+            <TasksList
+              title="In Progress"
+              tasks={inProgressTasks}
+              onStartTask={onStartTask}
+              onCompleteTask={onCompleteTask}
+              onEditTask={handleEditTask}
+              onDeleteTask={onDeleteTask}
+              onTaskUpdated={handleTaskUpdated}
+            />
           </div>
           <div className="space-y-8">
             <TaskStatus tasks={tasks} />
@@ -87,6 +97,7 @@ const MainContent = ({ tasks, onStartTask, onCompleteTask, onAddTask, onEditTask
               onStartTask={onStartTask}
               onCompleteTask={onCompleteTask}
               onEditTask={handleEditTask}
+              // ✅ Add onDeleteTask and onTaskUpdated
               onDeleteTask={onDeleteTask}
               onTaskUpdated={handleTaskUpdated}
             />

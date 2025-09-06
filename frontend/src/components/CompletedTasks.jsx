@@ -1,6 +1,8 @@
+// src/components/CompletedTasks.jsx
 import TaskCard from './TaskCard';
 
-const CompletedTasks = ({ tasks, onStartTask, onCompleteTask }) => {
+// ✅ Add onDeleteTask and other necessary props
+const CompletedTasks = ({ tasks, onStartTask, onCompleteTask, onEditTask, onDeleteTask, onTaskUpdated }) => {
   return (
     <div className="bg-white rounded-3xl shadow-lg p-6">
       <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2 mb-4">
@@ -10,10 +12,14 @@ const CompletedTasks = ({ tasks, onStartTask, onCompleteTask }) => {
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskCard
-              key={task._id} // Use _id as the key
+              key={task._id}
               task={task}
-              onStartTask={onStartTask} // ✅ Prop name changed
-              onCompleteTask={onCompleteTask} // ✅ Prop name changed
+              onStartTask={onStartTask}
+              onCompleteTask={onCompleteTask}
+              onEditTask={onEditTask}
+              // ✅ Pass onDeleteTask and onTaskUpdated here
+              onDeleteTask={onDeleteTask}
+              onTaskUpdated={onTaskUpdated}
             />
           ))
         ) : (

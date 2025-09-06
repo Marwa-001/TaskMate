@@ -354,16 +354,29 @@ const hideLayout = location.pathname === "/login" || location.pathname === "/sig
                 />
               </PrivateRoute>
             } />
-            <Route path="/vital-tasks" element={
-              <PrivateRoute>
-                <VitalTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} onEditTask={editTask} onDeleteTask={deleteTask} />
-              </PrivateRoute>
-            } />
-            <Route path="/my-tasks" element={
-              <PrivateRoute>
-                <MyTasksPage tasks={tasks} onStartTask={startTask} onCompleteTask={completeTask} onEditTask={editTask} onDeleteTask={deleteTask} />
-              </PrivateRoute>
-            } />
+             <Route path="/vital-tasks" element={
+    <PrivateRoute>
+      <VitalTasksPage 
+        tasks={tasks}
+        onStartTask={startTask}
+        onCompleteTask={completeTask}
+        onEditTask={editTask}      // ✅ Add this prop
+        onDeleteTask={deleteTask}  // ✅ Add this prop
+      />
+    </PrivateRoute>
+  } />
+  <Route path="/my-tasks" element={
+    <PrivateRoute>
+      {/* This page is already correctly passing the props */}
+      <MyTasksPage
+        tasks={tasks}
+        onStartTask={startTask}
+        onCompleteTask={completeTask}
+        onEditTask={editTask}
+        onDeleteTask={deleteTask}
+      />
+    </PrivateRoute>
+  } />
             <Route path="/task-categories" element={
               <PrivateRoute>
                 <TaskCategoriesPage tasks={tasks} />

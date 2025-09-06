@@ -36,10 +36,9 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
   };
   
   const handleRemoveCollaborator = async (collaboratorId) => {
-    // ❌ REMOVE THIS BLOCK
-    // if (!window.confirm("Are you sure you want to remove this collaborator?")) {
-    //   return;
-    // }
+    if (!window.confirm("Are you sure you want to remove this collaborator?")) {
+       return;
+     }
 
     try {
       await axios.delete(`http://localhost:3000/api/todos/${_id}/collaborators/${collaboratorId}`, {
@@ -77,13 +76,14 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
                 Complete
               </button>
             )}
-            {isOwner && onEditTask && (
+            {isOwner && onEditTask && !isTaskCompleted && (
               <PencilSquareIcon
                 className="h-5 w-5 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
                 onClick={(e) => { e.stopPropagation(); onEditTask(_id); }}
               />
             )}
-            {isOwner && (
+            {/* ✅ Add condition: Hide the icon if the task is completed */}
+            {isOwner && !isTaskCompleted && (
               <UserPlusIcon
                 className="h-5 w-5 text-gray-400 hover:text-purple-500 cursor-pointer transition-colors"
                 onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
@@ -115,7 +115,6 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
                     {getInitials(c.name)}
                   </div>
                 )}
-                {/* ✅ Improved UI for removing collaborator */}
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                   {c.name}
                   <button
@@ -143,12 +142,15 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
           {duedate && (<span>Due: <span className="font-medium text-black">{duedate}</span></span>)}
         </div>
       </div>
-      <AddCollaboratorModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        taskId={_id}
-        onCollaboratorAdded={onTaskUpdated}
-      />
+      {/* ✅ Add condition: Only render the modal if the task is not completed */}
+      {!isTaskCompleted && (
+        <AddCollaboratorModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          taskId={_id}
+          onCollaboratorAdded={onTaskUpdated}
+        />
+      )}
     </div>
   );
 

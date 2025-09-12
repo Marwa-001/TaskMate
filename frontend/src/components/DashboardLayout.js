@@ -23,7 +23,7 @@ const DashboardLayout = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/todos", {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/todos`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -40,7 +40,7 @@ const DashboardLayout = () => {
   // CRUD Handlers
   const addTask = async (newTask) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/todos/create", newTask, {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/todos/create`, newTask, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks([...tasks, res.data]);
@@ -52,7 +52,7 @@ const DashboardLayout = () => {
   const startTask = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/edit/${id}`,
         { status: "In Progress" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +65,7 @@ const DashboardLayout = () => {
   const completeTask = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/edit/${id}`,
         { status: "Completed" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -77,7 +77,7 @@ const DashboardLayout = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/todos/delete/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/todos/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(tasks.filter((task) => task._id !== id));

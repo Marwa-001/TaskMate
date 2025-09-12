@@ -34,7 +34,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   className="w-14 h-14 md:w-16 md:h-16 aspect-square rounded-full object-cover border border-gray-300"
   src={
     user?.profilePhoto
-      ? `http://localhost:3000${user.profilePhoto}`
+      ? `${process.env.REACT_APP_BACKEND_URL}${user.profilePhoto}`
       : "https://placehold.co/64x64/E0E0E0/white?text=U"
   }
   alt={user?.name || "User"}

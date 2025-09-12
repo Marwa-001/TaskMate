@@ -41,7 +41,7 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
      }
 
     try {
-      await axios.delete(`http://localhost:3000/api/todos/${_id}/collaborators/${collaboratorId}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/todos/${_id}/collaborators/${collaboratorId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -107,7 +107,7 @@ const TaskCard = ({ task, onStartTask, onCompleteTask, onEditTask, onDeleteTask,
                 {c.profilePhoto && c.profilePhoto !== '/uploads/default-avatar.png' ? (
                   <img
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover"
-                    src={`http://localhost:3000${c.profilePhoto}`}
+                    src={`${process.env.REACT_APP_BACKEND_URL}${c.profilePhoto}`}
                     alt={c.name}
                   />
                 ) : (

@@ -104,7 +104,7 @@ const Login = () => {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/user/login", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -161,7 +161,7 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post("http://localhost:3000/api/user/register", { name, email, password });
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/register`, { name, email, password });
       await login(res.data.token);
       navigate('/dashboard');
     } catch (e) {
@@ -219,7 +219,7 @@ const App = () => {
       return;
     }
     try {
-      const res = await axios.get("http://localhost:3000/api/todos", {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/todos`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(res.data);
@@ -236,7 +236,7 @@ const App = () => {
         throw new Error('Authentication token not found.');
       }
       await axios.post(
-        "http://localhost:3000/api/todos/create",
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/create`,
         newTask, // 👈 Pass the new task data here
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -251,7 +251,7 @@ const App = () => {
   const updateTaskStatus = async (id, newStatus) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/edit/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -269,7 +269,7 @@ const App = () => {
 
   const deleteTask = async (taskId) => {
     try {
-        await axios.delete(`http://localhost:3000/api/todos/delete/${taskId}`, {
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/todos/delete/${taskId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(tasks.filter(task => task._id !== taskId));
@@ -283,7 +283,7 @@ const App = () => {
   const editTask = async (taskId, updatedTaskData) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/todos/edit/${taskId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/edit/${taskId}`,
         updatedTaskData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

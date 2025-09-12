@@ -1,6 +1,6 @@
-const userModel = require('../models/user-model')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const userModel = require('../models/user-model');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 module.exports.loginUser = async (req, res) => {
   try {
@@ -46,12 +46,28 @@ module.exports.registerUser = async (req, res) => {
             password: hash
         });
 
-        res.status(201).json(createdUser);
+        // ✅ Step 1: Generate a JWT token for the new user
+        const token = jwt.sign(
+            { email, id: createdUser._id },
+            process.env.JWT_SECRET || "SECRET",
+            { expiresIn: "1h" }
+        );
+        
+        // ✅ Step 2: Set the token in a cookie and send it in the response
+        res.cookie("token", token, { httpOnly: true });
+        res.status(200).json({
+            message: "User registered successfully",
+            token,
+            user: {
+                id: createdUser._id,
+                email: createdUser.email
+            }
+        });
 
     } catch (err) {
         res.status(500).json({ message: "Server error", error: err.message });
     }
-}
+};
 
 module.exports.logout = (req, res) => {
     res.cookie("token", "", { httpOnly: true, expires: new Date(0) });

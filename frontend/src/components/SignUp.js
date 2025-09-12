@@ -15,7 +15,7 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post("http://localhost:3000/api/users/signup", { name, email, password });
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/signup`, { name, email, password });
       login(res.data.token);
       navigate('/dashboard');
     } catch (e) {

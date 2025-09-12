@@ -26,7 +26,7 @@ const AddCollaboratorModal = ({ isOpen, onClose, taskId, onCollaboratorAdded }) 
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/todos/share/${taskId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/todos/share/${taskId}`,
         { collaboratorEmail: email },
         {
           headers: {

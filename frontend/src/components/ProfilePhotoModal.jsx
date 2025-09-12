@@ -16,7 +16,7 @@ const ProfilePhotoModal = ({ isOpen, onClose }) => {
       const formData = new FormData();
       formData.append("profilePhoto", file);
 
-      await axios.post("http://localhost:3000/api/user/upload-photo", formData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/upload-photo`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -49,7 +49,7 @@ const ProfilePhotoModal = ({ isOpen, onClose }) => {
           className="w-32 h-32 aspect-square mx-auto rounded-full object-cover border-2 border-gray-300 mb-4"
           src={
             user?.profilePhoto
-              ? `http://localhost:3000${user.profilePhoto}`
+              ? `${process.env.REACT_APP_BACKEND_URL}${user.profilePhoto}`
               : "https://placehold.co/128x128/E0E0E0/white?text=U"
           }
           alt={user?.name || "User"}

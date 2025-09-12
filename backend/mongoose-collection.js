@@ -1,12 +1,10 @@
 const mongoose = require('mongoose')
-const config = require('config')
 
-mongoose.connect(`${config.get("MONGODB_URI")}/todos`).then(function () {
+mongoose.connect(`${process.env.MONGODB_URI}`).then(function () {
         console.log("connected")
     })
     .catch(function (err) {
         console.log("not connected", err)
     })
-
 
 module.exports = mongoose.connection
